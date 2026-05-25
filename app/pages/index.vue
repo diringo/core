@@ -65,12 +65,12 @@ function handleFiles(files: FileList) {
 
 watch(sessionState, (next, prev) => {
   if (prev === 'creating' && next === 'waiting') track('session_created')
-  if (prev === 'joining' && next === 'waiting') track('session_joined')
-  if (prev === 'waiting' && next === 'connected') {
+  if (prev === 'joining' && next === 'connecting') track('session_joined')
+  if (prev === 'connecting' && next === 'connected') {
     vibrate([20])
     notify('Peer connected', { body: 'Someone joined your session' })
   }
-  if (next === 'connected' || next === 'waiting') {
+  if (next === 'connected' || next === 'waiting' || next === 'connecting') {
     requestWakeLock()
   } else {
     releaseWakeLock()
@@ -138,6 +138,7 @@ useHead({
     if (s === 'idle') return config.public.brandName
     if (s === 'creating' || s === 'joining') return `Connecting... — ${config.public.brandName}`
     if (s === 'waiting') return `Waiting for peer... — ${config.public.brandName}`
+    if (s === 'connecting') return `Peer joined — connecting... — ${config.public.brandName}`
     if (s === 'connected') {
       const sending = sendingFiles.value.length
       const receiving = receivingFiles.value.length
@@ -186,6 +187,16 @@ useHead({
             :encrypted="e2ee.isReady"
           />
           <SessionCodeCard :session-code="sessionCode" @leave="reset" />
+        </div>
+
+        <div v-else-if="sessionState === 'connecting'" class="flex flex-col items-center gap-6">
+          <ConnectionVisual
+            :local-seed="localPeerId"
+            :remote-seed="peerId"
+            state="connecting"
+            :encrypted="e2ee.isReady"
+          />
+          <p class="text-sm text-muted-foreground">Establishing encrypted connection…</p>
         </div>
 
         <div v-else-if="sessionState === 'connected'" class="space-y-4">

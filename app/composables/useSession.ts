@@ -1,4 +1,4 @@
-export type SessionState = 'idle' | 'creating' | 'joining' | 'waiting' | 'connected' | 'transferring' | 'disconnected'
+export type SessionState = 'idle' | 'creating' | 'joining' | 'waiting' | 'connecting' | 'connected' | 'transferring' | 'disconnected'
 
 export function useSession() {
   const signaling = useSignaling()
@@ -26,12 +26,13 @@ export function useSession() {
   signaling.on('session-joined', (data) => {
     sessionCode.value = data.code as string
     peerId.value = data.peerId as string
-    sessionState.value = 'waiting'
+    sessionState.value = 'connecting'
     startWebRTC('joiner')
   })
 
   signaling.on('peer-joined', (data) => {
     peerId.value = data.peerId as string
+    sessionState.value = 'connecting'
     startWebRTC('creator')
   })
 
@@ -168,13 +169,14 @@ export function useSession() {
     }
 
     if (role === 'creator') {
+      const keyPromise = e2ee.generateKey()
       dc = webrtc.createDataChannel()
       if (dc) {
         fileTransfer.setDataChannel(dc, e2eeInstance, chat.handleChatMessage)
         chat.setDataChannel(dc, e2eeInstance)
         dc.onopen = async () => {
           startDCKeepalive()
-          await e2ee.generateKey()
+          await keyPromise
           const rawKey = await e2ee.exportKey()
           dc?.send(JSON.stringify({ msgType: 'e2ee-key', key: Array.from(rawKey) }))
           e2ee.isReady.value = true
