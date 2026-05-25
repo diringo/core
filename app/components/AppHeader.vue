@@ -14,6 +14,9 @@ const config = useRuntimeConfig()
     </div>
 
     <div class="flex items-center gap-3">
+      <a href="https://github.com/diringo/core" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors" title="GitHub">
+        <Icon name="simple-icons:github" class="size-4" />
+      </a>
       <button
         @click="toggle"
         class="text-muted-foreground hover:text-foreground transition-colors"
