@@ -5,7 +5,6 @@
       <slot />
     </div>
     <footer class="text-center text-xs text-muted-foreground py-4 space-x-3">
-      <NuxtLink to="/privacy" class="hover:text-foreground transition-colors">Privacy</NuxtLink>
       <span>made with <Icon name="solar:heart-bold-duotone" class="size-3 inline text-rose-500 align-baseline" /> {{ useRuntimeConfig().public.brandYear }}</span>
     </footer>
 </div>
