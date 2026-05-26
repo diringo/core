@@ -135,7 +135,7 @@ const receivedFiles = computed(() => receiveList.value.filter(f => f.done))
 useHead({
   title: computed(() => {
     const s = sessionState.value
-    if (s === 'idle') return config.public.brandName
+    if (s === 'idle') return `${config.public.brandName} — P2P file streaming`
     if (s === 'creating' || s === 'joining') return `Connecting... — ${config.public.brandName}`
     if (s === 'waiting') return `Waiting for peer... — ${config.public.brandName}`
     if (s === 'connecting') return `Peer joined — connecting... — ${config.public.brandName}`
