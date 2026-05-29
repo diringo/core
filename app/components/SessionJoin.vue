@@ -32,7 +32,7 @@ function onJoin() {
 
     <div class="flex flex-col items-center gap-6 w-full max-w-sm">
         <Button size="lg" class="w-full text-sm" @click="onCreate">
-            Create a Session
+            Start sending
         </Button>
 
         <div class="flex items-center gap-3 w-full">
