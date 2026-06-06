@@ -12,12 +12,16 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Message is required' })
   }
 
-  const db = await getDb()
-  await db('feedback').insert({
-    name: body.name?.trim() || null,
-    email: body.email.trim(),
-    message: body.message.trim(),
-  })
+  try {
+    const db = await getDb()
+    await db('feedback').insert({
+      name: body.name?.trim() || null,
+      email: body.email.trim(),
+      message: body.message.trim(),
+    })
+  } catch (err) {
+    console.error('feedback error:', err)
+  }
 
   return { ok: true }
 })
