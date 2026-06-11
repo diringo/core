@@ -6,6 +6,15 @@ export default defineNuxtConfig({
   telemetry: false,
   devtools: { enabled: false },
   css: ['./app/assets/css/main.css'],
+  app: {
+    head: {
+      script: [
+        {
+          innerHTML: `(function(){var c=document.cookie.match(/color-mode=([^;]+)/);var m=c?c[1]:null;if(m==='dark'||(!m&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})()`,
+        },
+      ],
+    },
+  },
   vite: {
     plugins: [
       tailwindcss(),
